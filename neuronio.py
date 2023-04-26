@@ -52,6 +52,8 @@ class NeuronioTexto:
 Aqui está um exemplo de como podemos modificar a classe Neuronio para incluir essa funcionalidade:
 
 '''
+
+# ######################################### Saida do neurônio #################################################################
 raw = parser.from_file('livro.pdf')
 #print(raw['content'])
 
@@ -75,3 +77,35 @@ for vetor in vetor_texto:
     saida_texto = neuronio_texto.ativacao(vetor)
     saida_int = int(round(saida_texto))
     print("\n\nSaida do neurônio em inteiro :"+str(saida_int))
+
+########################################### Treinamento do neurõnio #############################################################################
+
+raw = parser.from_file('livro.pdf')
+texto = raw['content']
+
+# definir conjunto de dados de treinamento com saídas desejadas
+dados_treinamento = [
+    {'texto': 'exemplo de texto positivo', 'saida': 1},
+    {'texto': 'exemplo de texto negativo', 'saida': 0},
+    # adicionar mais textos com suas respectivas classificações
+]
+
+# vetorizar os textos do conjunto de dados de treinamento
+vetorizador = CountVectorizer(max_features=100)
+matriz_treinamento = vetorizador.fit_transform(
+    [dado['texto'] for dado in dados_treinamento]).toarray()
+
+# criar objeto NeuronioTexto com tamanho de vetorização igual ao número de colunas da matriz
+neuronio_texto = NeuronioTexto(matriz_treinamento.shape[1])
+
+# treinar o neurônio com o conjunto de dados de treinamento
+for i, dado in enumerate(dados_treinamento):
+    vetor_texto = matriz_treinamento[i]
+    saida_desejada = dado['saida']
+    neuronio_texto.treinar(vetor_texto, saida_desejada, taxa_aprendizado=2)
+
+# obter saída do neurônio para o vetor de texto dado
+saida_texto = neuronio_texto.ativacao(vetor_texto)
+
+print("Vetor de saída do neurônio:")
+print(saida_texto)

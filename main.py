@@ -32,5 +32,5 @@ dados = {
 pd.Series(dados) # Cria uma Series com um dicionári
 
 
-
+  
 print(dados)

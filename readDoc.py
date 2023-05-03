@@ -1,3 +1,5 @@
+
+#Leitura de Arquivos em Python
 '''
 from tika import parser
 raw = parser.from_file('livro.pdf')
